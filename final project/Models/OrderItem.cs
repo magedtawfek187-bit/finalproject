@@ -1,6 +1,6 @@
 ﻿namespace final_project.Models
 {
-    public class Orderitem
+    public class OrderItem
     {
         public int orderitemid { get; set; }
         public int orderid { get; set; }
