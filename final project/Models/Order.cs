@@ -17,9 +17,9 @@
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public string CustomerID { get; set; }
         public ApplicationUser Customer { get; set; }
-        public ICollection<Orderitem> OrderItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
         public Payment Payment { get; set; }
-        public delivery Delivery { get; set; }
+        public Delivery Delivery { get; set; }
 
     }
 }

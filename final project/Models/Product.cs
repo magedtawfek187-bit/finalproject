@@ -14,6 +14,6 @@
         public int CategoryID { get; set; } 
         public Restaurant Restaurant { get; set; }
         public Category Category { get; set; }
-        public ICollection<Orderitem> OrderItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
     }
 }

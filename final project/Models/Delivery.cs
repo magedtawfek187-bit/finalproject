@@ -5,7 +5,7 @@
         PickedUp,
         Delivered
     }
-    public class delivery
+    public class Delivery 
     {
         public int deliveryId {  get; set; }
         public int orderId { get; set; }
