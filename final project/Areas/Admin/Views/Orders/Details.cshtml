@@ -1,0 +1,118 @@
+﻿@model final_project.Models.Order
+@{
+    ViewData["Title"] = $"Order Details #{Model.OrderID}";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"] <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row g-3">
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-white"><h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>معلومات الطلب</h6></div>
+            <div class="card-body">
+                <p><strong>رقم الطلب:</strong> #@Model.OrderID</p>
+                <p><strong>العميل:</strong> @Model.Customer?.FullName</p>
+                <p><strong>الإيميل:</strong> @Model.Customer?.Email</p>
+                <p><strong>تاريخ الطلب:</strong> @Model.OrderDate.ToString("dd/MM/yyyy hh:mm tt")</p>
+                <p><strong>الإجمالي:</strong> @Model.TotalAmount.ToString("N2") ج.م</p>
+                <p>
+                    <strong>الحالة:</strong>
+                    @{
+                        var statusText = Model.Status switch
+                        {
+                            OrderStatus.Pending => "Pending",
+                            OrderStatus.Preparing => "Preparing",
+                            OrderStatus.OnTheWay => "OnTheWay",
+                            OrderStatus.Delivered => "Delivered",
+                            OrderStatus.Cancelled => "Cancelled",
+                            _ => ""
+                        };
+                    }
+                    <span class="badge bg-warning">@statusText</span>
+                </p>
+
+                <!-- تغيير الحالة -->
+                <form asp-action="UpdateStatus" asp-route-id="@Model.OrderID" method="post" class="d-flex gap-2 mt-3">
+                    @Html.AntiForgeryToken()
+                    <select name="status" class="form-select form-select-sm">
+                        @foreach (OrderStatus s in Enum.GetValues(typeof(OrderStatus)))
+                        {
+                            <option value="@s" selected="@(Model.Status == s)">
+                                @(s switch
+                                {
+                                    OrderStatus.Pending => "Pending",
+                                    OrderStatus.Preparing => "Preparing",
+                                    OrderStatus.OnTheWay => "OnTheWay",
+                                    OrderStatus.Delivered => "Delivered",
+                                    OrderStatus.Cancelled => "Cancelled",
+                                    _ => s.ToString()
+                                })
+                            </option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary">تحديث</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- معلومات التوصيل -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-white"><h6 class="mb-0"><i class="fas fa-truck me-2"></i>معلومات التوصيل</h6></div>
+            <div class="card-body">
+                @if (Model.Delivery != null)
+                {
+                    <p><strong>Driver:</strong> @Model.Delivery.Driver?.User?.FullName</p>
+                    <p><strong>PickupTime:</strong> @Model.Delivery.PickupTime?.ToString("hh:mm tt")</p>
+                    <p><strong>DeliveryTime:</strong> @Model.Delivery.DeliveryTime?.ToString("hh:mm tt")</p>
+                    <p><strong>Status:</strong> <span class="badge bg-info">@Model.Delivery.Status</span></p>
+                }
+                else
+                {
+                    <p class="text-muted">No driver yet appointed</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-white"><h6 class="mb-0"><i class="fas fa-list me-2"></i>Order Products</h6></div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="table-light">
+                        <tr><th>Product</th><th>Quantity</th><th>Item Price</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems ?? new List<final_project.Models.OrderItem>())
+                        {
+                            <tr>
+                                <td>@item.Product?.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.UnitPrice.ToString("N2") ج.م</td>
+                                <td>@((item.Quantity * item.UnitPrice).ToString("N2")) L.E</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-light">
+                            <td colspan="3"><strong>الإجمالي</strong></td>
+                            <td><strong>@Model.TotalAmount.ToString("N2") L.E</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3"><i class="fas fa-arrow-right me-1"></i> Back</a>
