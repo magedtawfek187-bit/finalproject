@@ -2,12 +2,14 @@
 {
     public class Review
     {
-        public int reviewId { get; set; }
-        public int customerId { get; set; }
-        public int restaurantId { get; set; }
-        public decimal rating { get; set; }
-        public string comment { get; set; }
-        public DateTime reviewdate { get; set; }= DateTime.Now;
+        public int ReviewID { get; set; }
+        public string CustomerID { get; set; } 
+        public int RestaurantID { get; set; }
+        public int Rating { get; set; }
+        public string Comment { get; set; }
+        public DateTime ReviewDate { get; set; } = DateTime.Now;
 
+        public ApplicationUser Customer { get; set; }
+        public Restaurant Restaurant { get; set; }
     }
 }

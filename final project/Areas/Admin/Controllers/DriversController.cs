@@ -43,8 +43,7 @@ namespace final_project.Areas.Admin.Controllers
             _context.Drivers.Add(model);
             await _context.SaveChangesAsync();
 
-            // إضافة Role Driver للـ User
-            var user = await _userManager.FindByIdAsync(model.UserID);
+            var user = await _userManager.FindByIdAsync(model.userid);
             if (user != null && !await _userManager.IsInRoleAsync(user, "Driver"))
                 await _userManager.AddToRoleAsync(user, "Driver");
 
@@ -58,7 +57,7 @@ namespace final_project.Areas.Admin.Controllers
             var driver = await _context.Drivers.FindAsync(id);
             if (driver == null) return NotFound();
             ViewData["Title"] = "Edit Driver";
-            await LoadUsers(driver.UserID);
+            await LoadUsers(driver.userid);
             return View(driver);
         }
 

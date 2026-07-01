@@ -5,14 +5,19 @@
         PickedUp,
         Delivered
     }
-    public class Delivery 
-    {
-        public int deliveryId {  get; set; }
-        public int orderId { get; set; }
-        public int driverId { get; set; }
-        public DateTime pickuptime { get; set; }
-        public DateTime deliverytime { get; set; }
-        public DeliveryStatus DeliveryStatus { get; set; } = DeliveryStatus.Assigned;
+    
+        public class Delivery
+        {
+            public int DeliveryID { get; set; }      
+            public int OrderID { get; set; }         
+            public int DriverID { get; set; }        
+            public DateTime? PickupTime { get; set; }   
+            public DateTime? DeliveryTime { get; set; } 
+            public DeliveryStatus Status { get; set; } = DeliveryStatus.Assigned; 
+
+            public Order Order { get; set; }
+            public Driver Driver { get; set; }
+        }
 
     }
-}
+
