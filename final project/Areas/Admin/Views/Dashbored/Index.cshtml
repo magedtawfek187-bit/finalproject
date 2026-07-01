@@ -1,0 +1,154 @@
+﻿@model final_project.Areas.Admin.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Control Panel";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <div class="number">@Model.TotalUsers</div>
+            <div class="label">Total Users</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+            <div class="icon"><i class="fas fa-receipt"></i></div>
+            <div class="number">@Model.TotalOrders</div>
+            <div class="label">Total Orders</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+            <div class="icon"><i class="fas fa-store"></i></div>
+            <div class="number">@Model.TotalRestaurants</div>
+            <div class="label">Total Restaurants</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+            <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+            <div class="number">@Model.TotalRevenue.ToString("N0") ج.م</div>
+            <div class="label">Total Revenue</div>
+        </div>
+    </div>
+</div>
+
+<!-- Row 2 Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+            <div class="icon"><i class="fas fa-burger"></i></div>
+            <div class="number">@Model.TotalProducts</div>
+            <div class="label">Total Products</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">
+            <div class="icon"><i class="fas fa-car"></i></div>
+            <div class="number">@Model.TotalDrivers</div>
+            <div class="label">Total Drivers</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #fccb90, #d57eeb);">
+            <div class="icon"><i class="fas fa-truck"></i></div>
+            <div class="number">@Model.TotalDeliveries</div>
+            <div class="label">Total Deliveries</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #a1c4fd, #c2e9fb);">
+            <div class="icon"><i class="fas fa-star"></i></div>
+            <div class="number">@Model.TotalReviews</div>
+            <div class="label">Total Reviews</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-8">
+        <div class="card p-3">
+            <div class="card-header bg-white">
+                <h6 class="mb-0"><i class="fas fa-chart-line me-2 text-primary"></i>The orders last 7 days</h6>
+            </div>
+            <canvas id="lineChart" height="120"></canvas>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <div class="card-header bg-white">
+                <h6 class="mb-0"><i class="fas fa-chart-pie me-2 text-danger"></i>Order statues</h6>
+            </div>
+            <canvas id="pieChart" height="200"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<div class="row g-3">
+    <div class="col-md-12">
+        <div class="card p-3">
+            <div class="card-header bg-white">
+                <h6 class="mb-0"><i class="fas fa-chart-bar me-2 text-success"></i>Most restaurents in orders</h6>
+            </div>
+            <canvas id="barChart" height="80"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.LastWeekDays)),
+                datasets: [{
+                    label: 'No.orders',
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.LastWeekOrders)),
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102,126,234,0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+
+        new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Pending', 'Preparing', 'On the way', 'Deliverd', 'Cancelled'],
+                datasets: [{
+                    data: [
+                        @Model.PendingOrders,
+                        @Model.PreparingOrders,
+                        @Model.OnTheWayOrders,
+                        @Model.DeliveredOrders,
+                        @Model.CancelledOrders
+                    ],
+                    backgroundColor: ['#ffc107','#17a2b8','#007bff','#28a745','#dc3545']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // ===== Bar Chart =====
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopRestaurantNames)),
+                datasets: [{
+                    label: 'No.orders',
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopRestaurantOrders)),
+                    backgroundColor: ['#667eea','#f5576c','#4facfe','#43e97b','#fa709a']
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+    </script>
+}

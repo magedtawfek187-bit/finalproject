@@ -247,7 +247,7 @@ namespace final_project.Migrations
 
                     b.HasKey("CategoryID");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("final_project.Models.Delivery", b =>
@@ -278,7 +278,7 @@ namespace final_project.Migrations
                     b.HasIndex("orderId")
                         .IsUnique();
 
-                    b.ToTable("Deliveries");
+                    b.ToTable("Deliveries", (string)null);
                 });
 
             modelBuilder.Entity("final_project.Models.Driver", b =>
@@ -302,7 +302,7 @@ namespace final_project.Migrations
 
                     b.HasKey("driverid");
 
-                    b.ToTable("Drivers");
+                    b.ToTable("Drivers", (string)null);
                 });
 
             modelBuilder.Entity("final_project.Models.Order", b =>
@@ -330,7 +330,7 @@ namespace final_project.Migrations
 
                     b.HasIndex("CustomerID");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("final_project.Models.OrderItem", b =>
@@ -359,7 +359,7 @@ namespace final_project.Migrations
 
                     b.HasIndex("productid");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("final_project.Models.Payment", b =>
@@ -390,7 +390,7 @@ namespace final_project.Migrations
                     b.HasIndex("orderId")
                         .IsUnique();
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("final_project.Models.Product", b =>
@@ -431,7 +431,7 @@ namespace final_project.Migrations
 
                     b.HasIndex("RestaurantID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("final_project.Models.Restaurant", b =>
@@ -459,7 +459,7 @@ namespace final_project.Migrations
 
                     b.HasKey("RestaurantID");
 
-                    b.ToTable("Restaurants");
+                    b.ToTable("Restaurants", (string)null);
                 });
 
             modelBuilder.Entity("final_project.Models.Review", b =>
@@ -495,7 +495,7 @@ namespace final_project.Migrations
 
                     b.HasIndex("restaurantId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
